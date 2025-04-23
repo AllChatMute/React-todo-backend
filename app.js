@@ -17,7 +17,7 @@ async function startServer() {
   try {
     await connectToDataBase();
 
-    app.use(authRouter);
+    app.use("/auth", authRouter);
 
     app.listen(PORT, () => {
       console.log("Server started");

@@ -1,25 +1,30 @@
 require("dotenv").config();
+const jwt = require("jsonwebtoken");
 const User = require("../models/User");
+
+const SECRET = process.env.SECRET_KEY;
 
 async function registerController(req, res) {
   try {
-    const foundedUser = await User.find({
-      $or: [{ email: req.body.email }, { username: req.body.username }],
-    });
-
-    if (foundedUser) {
-      return res.status(400).json({ message: "User already exists" });
-    }
-
-    await User.insertOne({
-      username: req.body.username,
+    const newUser = {
       email: req.body.email,
       password: req.body.password,
+    };
+
+    await User.insertOne({ username: req.body.username, ...newUser });
+
+    const token = jwt.sign(newUser, SECRET, { expiresIn: "1h" });
+
+    res.cookie("auth", token, {
+      maxAge: 1000 * 60 * 60,
+      httpOnly: true,
+      secure: false,
     });
 
-    res.status(401).json({ message: "Created" });
+    res.status(201).send(token);
   } catch (error) {
     console.log(error);
+    res.send(error);
   }
 }
 

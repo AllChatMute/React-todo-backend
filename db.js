@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const url = "mongodb://localhost:27017/task-api-express";
+const url = "mongodb://localhost:27017/mongo-taskAPI";
 
 async function connectToDataBase() {
   try {

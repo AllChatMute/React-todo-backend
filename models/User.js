@@ -13,7 +13,7 @@ const userSchema = new mongoose.Schema({
           username: v,
         });
 
-        return !user;
+        return !user.length;
       },
       message: "Username is busy",
     },
@@ -27,7 +27,6 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true,
-    match: /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
     minlength: 8,
   },
 });
