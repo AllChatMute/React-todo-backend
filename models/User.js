@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const Task = require("./Task");
+const Task = require("./TaskSchema");
 
 const userSchema = new mongoose.Schema({
   username: {
@@ -30,12 +30,7 @@ const userSchema = new mongoose.Schema({
     required: true,
     minlength: 8,
   },
-  todos: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Task",
-    },
-  ],
+  todos: [Task],
 });
 
 const User = mongoose.model("User", userSchema);

@@ -8,14 +8,14 @@ async function isAuth(req, res, next) {
     const token = req.cookies.auth;
 
     jwt.verify(token, SECRET, (err, data) => {
-      if (err) return res.sendStatus(403);
+      if (err) return res.sendStatus(401);
 
-      console.log(data);
+      req.email = data.email;
       next();
     });
   } catch (error) {
     console.log(error);
-    res.status(400).send("Unknown error");
+    res.status(400).send({ message: "Unknown error" });
   }
 }
 
