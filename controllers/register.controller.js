@@ -11,7 +11,11 @@ async function registerController(req, res) {
       password: req.body.password,
     };
 
-    await User.insertOne({ username: req.body.username, ...newUser });
+    await User.insertOne({
+      username: req.body.username,
+      ...newUser,
+      todos: [],
+    });
 
     const token = jwt.sign(newUser, SECRET, { expiresIn: "1h" });
 

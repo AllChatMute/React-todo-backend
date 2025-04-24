@@ -3,6 +3,7 @@ const express = require("express");
 const cookieParser = require("cookie-parser");
 const connectToDataBase = require("./db");
 const authRouter = require("./routes/auth.route");
+const todosRouter = require("./routes/todos.route");
 
 const app = express();
 
@@ -18,6 +19,7 @@ async function startServer() {
     await connectToDataBase();
 
     app.use("/auth", authRouter);
+    app.use("/todos", todosRouter);
 
     app.listen(PORT, () => {
       console.log("Server started");
