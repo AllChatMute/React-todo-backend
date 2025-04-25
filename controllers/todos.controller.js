@@ -59,4 +59,31 @@ async function updateTodo(req, res) {
   }
 }
 
-module.exports = { createTodo, updateTodo };
+async function deleteTodo(req, res) {
+  try {
+    const email = req.email;
+    const id = +req.params.id;
+
+    const todos = (await User.findOne({ email })).todos;
+
+    if (todos.find((item) => item.id === +id)) {
+      await User.findOneAndUpdate(
+        { email },
+        {
+          $pull: {
+            todos: { id },
+          },
+        },
+        { new: true }
+      );
+
+      return res.status(204).json({ message: "Deleted" });
+    } else {
+      return res.status(400).json({ message: "Not Found" });
+    }
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json({ message: "Unknown error" });
+  }
+}
+module.exports = { createTodo, updateTodo, deleteTodo };
