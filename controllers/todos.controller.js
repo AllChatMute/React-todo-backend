@@ -6,7 +6,7 @@ async function createTodo(req, res) {
     const todos = (await User.findOne({ email })).todos;
 
     const newID =
-      todos.length > 0 ? Math.max(...user.todos.map((t) => t.id)) + 1 : 1;
+      todos.length > 0 ? Math.max(...todos.map((t) => t.id)) + 1 : 1;
 
     const newTodo = {
       id: newID,
@@ -19,11 +19,44 @@ async function createTodo(req, res) {
       { new: true }
     );
 
-    res.status(201).send("Added task");
+    return res.status(201).json({ message: "Task added" });
   } catch (error) {
     console.log(error);
-    res.status(400).send("Unknown error");
+    return res.status(400).json({ message: "Unknown error" });
   }
 }
 
-module.exports = { createTodo };
+async function updateTodo(req, res) {
+  try {
+    const email = req.email;
+    const id = req.params.id;
+
+    const todos = (await User.findOne({ email })).todos;
+    const todoIndex = todos.findIndex((item) => item.id === +id);
+
+    const updatedTodo = {
+      id,
+      ...req.body,
+    };
+    if (todos.find((item) => item.id === +id)) {
+      await User.findOneAndUpdate(
+        { email },
+        {
+          $set: {
+            [`todos.${todoIndex}`]: updatedTodo,
+          },
+        },
+        { new: true }
+      );
+
+      return res.json({ message: "Task updated" });
+    } else {
+      return res.status(404).json({ message: "Not Found" });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ message: "Unknown error" });
+  }
+}
+
+module.exports = { createTodo, updateTodo };
