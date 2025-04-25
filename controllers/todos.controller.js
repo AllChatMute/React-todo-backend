@@ -3,16 +3,22 @@ const User = require("../models/User");
 async function createTodo(req, res) {
   try {
     const email = req.email;
+    const todos = (await User.findOne({ email })).todos;
 
-    const user = await User.findOne({ email });
-    const todos = user.todos;
-    todos.push({
-      id: todos[todos.length - 1]?.id || 1,
+    const newID =
+      todos.length > 0 ? Math.max(...user.todos.map((t) => t.id)) + 1 : 1;
+
+    const newTodo = {
+      id: newID,
       ...req.body,
-    });
-    console.log(user);
+    };
 
-    await User.findOneAndUpdate(user, todos);
+    await User.findOneAndUpdate(
+      { email },
+      { $push: { todos: newTodo } },
+      { new: true }
+    );
+
     res.status(201).send("Added task");
   } catch (error) {
     console.log(error);
