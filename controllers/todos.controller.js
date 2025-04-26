@@ -93,14 +93,9 @@ async function getTodos(req, res) {
     const page = +req.query.page || 1;
     const limit = +req.query.limit || 10;
     const startIndex = (page - 1) * limit;
-    console.log(startIndex);
-
     const todos = (await User.findOne({ email })).todos;
 
-    const items = todos.splice(
-      startIndex === 0 ? startIndex : startIndex,
-      startIndex + limit
-    );
+    const items = todos.splice(startIndex ?? 0, limit);
 
     return res.json({
       data: items,
