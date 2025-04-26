@@ -5,6 +5,7 @@ const {
   createTodo,
   updateTodo,
   deleteTodo,
+  getTodos,
 } = require("../controllers/todos.controller");
 
 const todosRouter = express.Router();
@@ -12,6 +13,7 @@ const todosRouter = express.Router();
 todosRouter.use(validateTodo);
 todosRouter.use(isAuthed);
 
+todosRouter.get("/", getTodos);
 todosRouter.post("/", createTodo);
 todosRouter.put("/:id", updateTodo);
 todosRouter.delete("/:id", deleteTodo);

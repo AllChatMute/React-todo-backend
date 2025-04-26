@@ -66,7 +66,7 @@ async function deleteTodo(req, res) {
 
     const todos = (await User.findOne({ email })).todos;
 
-    if (todos.find((item) => item.id === +id)) {
+    if (todos.find((item) => item.id === id)) {
       await User.findOneAndUpdate(
         { email },
         {
@@ -86,4 +86,30 @@ async function deleteTodo(req, res) {
     return res.status(400).json({ message: "Unknown error" });
   }
 }
-module.exports = { createTodo, updateTodo, deleteTodo };
+
+async function getTodos(req, res) {
+  try {
+    const email = req.email;
+    const page = +req.query.page || 1;
+    const limit = +req.query.limit || 10;
+    const startIndex = (page - 1) * limit;
+    console.log(startIndex);
+
+    const todos = (await User.findOne({ email })).todos;
+
+    const items = todos.splice(
+      startIndex === 0 ? startIndex : startIndex,
+      startIndex + limit
+    );
+
+    return res.json({
+      data: items,
+      page,
+      limit,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json({ message: "Unknown error" });
+  }
+}
+module.exports = { createTodo, updateTodo, deleteTodo, getTodos };
