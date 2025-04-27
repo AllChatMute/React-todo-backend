@@ -6,6 +6,7 @@ const SECRET = process.env.SECRET_KEY;
 
 async function registerController(req, res) {
   try {
+    console.log(req.body);
     const newUser = {
       email: req.body.email,
       password: req.body.password,

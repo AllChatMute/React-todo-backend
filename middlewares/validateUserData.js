@@ -1,12 +1,9 @@
-const connectToDataBase = require("../db");
-const User = require("../models/User");
-
 const regex =
   /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/;
 
 async function validateUserData(req, res, next) {
   try {
-    await connectToDataBase();
+    console.log(req.body);
     const { username, email, password } = req.body;
 
     if (
