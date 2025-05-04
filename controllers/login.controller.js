@@ -17,6 +17,7 @@ async function loginController(req, res) {
         maxAge: 1000 * 60 * 60,
         httpOnly: true,
         secure: false,
+        sameSite: "lax",
       });
 
       res.send(token);

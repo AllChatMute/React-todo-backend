@@ -10,12 +10,11 @@ const {
 
 const todosRouter = express.Router();
 
-todosRouter.use(validateTodo);
 todosRouter.use(isAuthed);
 
 todosRouter.get("/", getTodos);
-todosRouter.post("/", createTodo);
-todosRouter.put("/:id", updateTodo);
-todosRouter.delete("/:id", deleteTodo);
+todosRouter.post("/", validateTodo, createTodo);
+todosRouter.put("/:id", validateTodo, updateTodo);
+todosRouter.delete("/:id", validateTodo, deleteTodo);
 
 module.exports = todosRouter;
