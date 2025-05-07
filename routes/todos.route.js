@@ -15,6 +15,6 @@ todosRouter.use(isAuthed);
 todosRouter.get("/", getTodos);
 todosRouter.post("/", validateTodo, createTodo);
 todosRouter.put("/:id", validateTodo, updateTodo);
-todosRouter.delete("/:id", validateTodo, deleteTodo);
+todosRouter.delete("/:id", deleteTodo);
 
 module.exports = todosRouter;
